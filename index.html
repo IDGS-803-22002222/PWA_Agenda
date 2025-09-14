@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Contactos PWA</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container-fluid vh-100 gradient-bg">
+        <div class="row justify-content-center align-items-center min-vh-100 p-3">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <!-- Header -->
+                    <div class="card-header bg-primary text-white p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h1 class="h2 mb-0 fw-light">
+                                <i class="bi bi-person-lines-fill me-2"></i>
+                                Agenda de Contactos
+                            </h1>
+                            <button class="btn btn-light btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#contactModal">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Añadir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="card-body p-0">
+                        <div class="p-4 border-bottom bg-light">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control border-start-0 ps-0" id="searchInput" 
+                                       placeholder="Buscar contacto..." oninput="searchContacts()">
+                            </div>
+                        </div>
+
+                        <!-- Contacts Table Header (Desktop) -->
+                        <div class="d-none d-md-block border-bottom bg-light">
+                            <div class="row g-0 p-3 fw-semibold text-muted">
+                                <div class="col-4">Nombre</div>
+                                <div class="col-4">Teléfono</div>
+                                <div class="col-4">Correo</div>
+                            </div>
+                        </div>
+
+                        <!-- Contacts List -->
+                        <div id="contactsList" class="contacts-container">
+                            <!-- Empty state -->
+                            <div class="text-center p-5" id="emptyState">
+                                <i class="bi bi-person-plus-fill display-1 text-muted mb-3"></i>
+                                <h4 class="text-muted mb-2">No hay contactos aún</h4>
+                                <p class="text-muted">Haz clic en "Añadir" para agregar tu primer contacto</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-1">
+                    <h5 class="modal-title fw-semibold">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Agregar Contacto
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <form id="contactForm" onsubmit="saveContact(event)">
+                        <div class="mb-3">
+                            <label for="contactName" class="form-label fw-semibold">
+                                <i class="bi bi-person me-1"></i>
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control" id="contactName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactPhone" class="form-label fw-semibold">
+                                <i class="bi bi-telephone me-1"></i>
+                                Teléfono
+                            </label>
+                            <input type="tel" class="form-control" id="contactPhone" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contactEmail" class="form-label fw-semibold">
+                                <i class="bi bi-envelope me-1"></i>
+                                Correo
+                            </label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Detail Modal -->
+    <div class="modal fade" id="contactDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 pb-1">
+                    <h5 class="modal-title fw-semibold">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Detalles del Contacto
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div id="contactDetails"></div>
+                    <div class="d-flex gap-2 justify-content-end mt-4">
+                        <button type="button" class="btn btn-danger" onclick="deleteContact()">
+                            <i class="bi bi-trash me-1"></i>
+                            Eliminar
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/4.2.0/dexie.min.js" 
+    integrity="sha512-LuXLH9xON6/aAGYxi4Z1Dx8588Z80gY3iMmGtUlYmblUc1ulC/cGHuANXIvm8fnIWp5ShUk2MRBIWylGguXF9g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+    
+    <script src="index.js"></script>
+</body>
+</html>
