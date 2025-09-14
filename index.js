@@ -1,31 +1,25 @@
-// Database setup
 const db = new Dexie("ContactsApp");
 db.version(1).stores({ 
     contacts: "++id, name, phone, email" 
 });
 
-// Global variables
 let allContacts = [];
 let currentContactId = null;
 
-// DOM elements
 const contactsList = document.getElementById('contactsList');
 const searchInput = document.getElementById('searchInput');
 const contactForm = document.getElementById('contactForm');
 const emptyState = document.getElementById('emptyState');
 
-// Bootstrap modal instances
 let contactModal;
 let contactDetailModal;
 
-// Initialize modals when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
     contactDetailModal = new bootstrap.Modal(document.getElementById('contactDetailModal'));
     loadContacts();
 });
 
-// Save contact function
 async function saveContact(event) {
     event.preventDefault();
     
@@ -40,7 +34,6 @@ async function saveContact(event) {
             contactModal.hide();
             contactForm.reset();
             
-            // Show success toast (optional)
             showToast('Contacto agregado exitosamente', 'success');
         } catch (error) {
             console.error('Error saving contact:', error);
@@ -49,7 +42,6 @@ async function saveContact(event) {
     }
 }
 
-// Load all contacts
 async function loadContacts() {
     try {
         allContacts = await db.contacts.orderBy('name').toArray();
@@ -59,7 +51,6 @@ async function loadContacts() {
     }
 }
 
-// Display contacts
 function displayContacts(contacts) {
     if (contacts.length === 0) {
         contactsList.innerHTML = `
@@ -129,7 +120,6 @@ function displayContacts(contacts) {
     contactsList.innerHTML = contactsHTML;
 }
 
-// Search contacts
 function searchContacts() {
     const searchTerm = searchInput.value.toLowerCase().trim();
     
@@ -147,7 +137,6 @@ function searchContacts() {
     displayContacts(filteredContacts);
 }
 
-// Show contact details
 function showContactDetails(contactId) {
     const contact = allContacts.find(c => c.id === contactId);
     if (!contact) return;
@@ -189,7 +178,6 @@ function showContactDetails(contactId) {
     contactDetailModal.show();
 }
 
-// Delete contact
 async function deleteContact() {
     if (!currentContactId) return;
     
@@ -208,9 +196,7 @@ async function deleteContact() {
     }
 }
 
-// Show toast notification (optional enhancement)
 function showToast(message, type = 'info') {
-    // Create toast container if it doesn't exist
     let toastContainer = document.getElementById('toastContainer');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
@@ -220,7 +206,6 @@ function showToast(message, type = 'info') {
         document.body.appendChild(toastContainer);
     }
 
-    // Create toast element
     const toastId = 'toast-' + Date.now();
     const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
     
@@ -235,23 +220,19 @@ function showToast(message, type = 'info') {
     
     toastContainer.insertAdjacentHTML('beforeend', toastHTML);
     
-    // Show toast
     const toastElement = document.getElementById(toastId);
     const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
     toast.show();
     
-    // Remove toast element after it's hidden
     toastElement.addEventListener('hidden.bs.toast', () => {
         toastElement.remove();
     });
 }
 
-// Clear form when modal is hidden
 document.getElementById('contactModal').addEventListener('hidden.bs.modal', function () {
     contactForm.reset();
 });
 
-// Reset current contact when detail modal is hidden
 document.getElementById('contactDetailModal').addEventListener('hidden.bs.modal', function () {
     currentContactId = null;
 });

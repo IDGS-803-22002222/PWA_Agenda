@@ -7,11 +7,9 @@
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="manifest" href="./manifest.json">
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -19,7 +17,6 @@
         <div class="row justify-content-center align-items-center min-vh-100 p-3">
             <div class="col-12 col-lg-10 col-xl-8">
                 <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-                    <!-- Header -->
                     <div class="card-header bg-primary text-white p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <h1 class="h2 mb-0 fw-light">
@@ -33,7 +30,6 @@
                         </div>
                     </div>
 
-                    <!-- Search Bar -->
                     <div class="card-body p-0">
                         <div class="p-4 border-bottom bg-light">
                             <div class="input-group">
@@ -45,7 +41,6 @@
                             </div>
                         </div>
 
-                        <!-- Contacts Table Header (Desktop) -->
                         <div class="d-none d-md-block border-bottom bg-light">
                             <div class="row g-0 p-3 fw-semibold text-muted">
                                 <div class="col-4">Nombre</div>
@@ -54,9 +49,7 @@
                             </div>
                         </div>
 
-                        <!-- Contacts List -->
                         <div id="contactsList" class="contacts-container">
-                            <!-- Empty state -->
                             <div class="text-center p-5" id="emptyState">
                                 <i class="bi bi-person-plus-fill display-1 text-muted mb-3"></i>
                                 <h4 class="text-muted mb-2">No hay contactos aún</h4>
@@ -69,7 +62,6 @@
         </div>
     </div>
 
-    <!-- Contact Modal -->
     <div class="modal fade" id="contactModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -118,7 +110,6 @@
         </div>
     </div>
 
-    <!-- Contact Detail Modal -->
     <div class="modal fade" id="contactDetailModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -150,7 +141,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/4.2.0/dexie.min.js" 
     integrity="sha512-LuXLH9xON6/aAGYxi4Z1Dx8588Z80gY3iMmGtUlYmblUc1ulC/cGHuANXIvm8fnIWp5ShUk2MRBIWylGguXF9g==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
